@@ -1,4 +1,4 @@
-package example.sylvan.com.kotlindemo.data
+package example.sylvan.com.kotlindemo.data.sever
 
 /**
  * Created by sylvan on 2017/8/17.

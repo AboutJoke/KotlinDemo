@@ -1,7 +1,7 @@
 package example.sylvan.com.kotlindemo.domain.mappers
 
-import example.sylvan.com.kotlindemo.data.Forecast
-import example.sylvan.com.kotlindemo.data.ForecastResult
+import example.sylvan.com.kotlindemo.data.sever.Forecast
+import example.sylvan.com.kotlindemo.data.sever.ForecastResult
 import example.sylvan.com.kotlindemo.domain.model.ForecastList
 import java.text.DateFormat
 import java.util.*
@@ -12,8 +12,8 @@ import example.sylvan.com.kotlindemo.domain.model.Forecast as ModelForecast
  * Created by sylvan on 2017/8/17.
  */
 class ForecastDataMapper {
-    fun convertFromDataModel(forecast : ForecastResult) : ForecastList {
-        return ForecastList(forecast.city.name, forecast.city.country, convertForecastListToDomain(forecast.list))
+    fun convertFromDataModel(zipCode: Long, forecast : ForecastResult) : ForecastList {
+        return ForecastList(zipCode,forecast.city.name, forecast.city.country, convertForecastListToDomain(forecast.list))
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>) : List<ModelForecast>{
@@ -24,7 +24,7 @@ class ForecastDataMapper {
     }
 
     private fun convertForecastItemToDomain(forecast: Forecast): ModelForecast {
-        return ModelForecast(convertDate(forecast.dt), forecast.weather[0].description,
+        return ModelForecast(forecast.dt, forecast.weather[0].description,
                 forecast.temp.max.toInt(), forecast.temp.min.toInt(),generateIconUrl(forecast.
                 weather[0].icon))
     }

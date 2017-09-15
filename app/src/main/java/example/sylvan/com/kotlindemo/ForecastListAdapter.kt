@@ -9,6 +9,8 @@ import example.sylvan.com.kotlindemo.domain.model.Forecast
 import example.sylvan.com.kotlindemo.domain.model.ForecastList
 import example.sylvan.com.kotlindemo.utils.ctx
 import kotlinx.android.synthetic.main.item_forecast.view.*
+import java.text.DateFormat
+import java.util.*
 
 /**
  * Created by sylvan on 2017/8/17.
@@ -25,7 +27,7 @@ class ForecastListAdapter(val weekForecast: ForecastList,val itemClick: (Forecas
         holder?.bindForecast(weekForecast[position])
     }
 
-    override fun getItemCount(): Int = weekForecast.size()
+    override fun getItemCount(): Int = weekForecast.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent?.ctx).inflate(R.layout.item_forecast, parent, false)
@@ -44,12 +46,17 @@ class ForecastListAdapter(val weekForecast: ForecastList,val itemClick: (Forecas
                 Glide.with(itemView.ctx)
                         .load(iconUrl)
                         .into(itemView.icon)
-                itemView.date.text = date
+                itemView.date.text = convertDate(date)
                 itemView.description.text = description
                 itemView.maxTemperature.text = "${high.toString()}º"
                 itemView.minTemperature.text = "${low.toString()}º"
                 itemView.setOnClickListener { itemClick(forecast) }
             }
+        }
+
+        private fun convertDate(date: Long): String {
+            val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+            return df.format(date)
         }
     }
 }
