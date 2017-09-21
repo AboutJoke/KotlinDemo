@@ -1,7 +1,7 @@
 package example.sylvan.com.kotlindemo.domain.commands
 
-import example.sylvan.com.kotlindemo.data.sever.ForecastRequest
-import example.sylvan.com.kotlindemo.domain.mappers.ForecastDataMapper
+import example.sylvan.com.kotlindemo.data.sever.ForecastByZipCodeRequest
+import example.sylvan.com.kotlindemo.data.sever.ServerDataMapper
 import example.sylvan.com.kotlindemo.domain.model.ForecastList
 
 /**
@@ -9,8 +9,8 @@ import example.sylvan.com.kotlindemo.domain.model.ForecastList
  */
 class RequestForecastCommand(private val zipCode: Long) : Command<ForecastList> {
     override fun execute(): ForecastList {
-        val forecastRequest = ForecastRequest(zipCode)
-        return ForecastDataMapper().convertFromDataModel(zipCode,forecastRequest.execute())
+        val forecastRequest = ForecastByZipCodeRequest(zipCode)
+        return ServerDataMapper().convertToDomain(zipCode,forecastRequest.execute())
     }
 
 }

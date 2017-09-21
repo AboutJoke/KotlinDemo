@@ -1,7 +1,5 @@
-package example.sylvan.com.kotlindemo.domain.mappers
+package example.sylvan.com.kotlindemo.data.sever
 
-import example.sylvan.com.kotlindemo.data.sever.Forecast
-import example.sylvan.com.kotlindemo.data.sever.ForecastResult
 import example.sylvan.com.kotlindemo.domain.model.ForecastList
 import java.text.DateFormat
 import java.util.*
@@ -11,8 +9,8 @@ import example.sylvan.com.kotlindemo.domain.model.Forecast as ModelForecast
 /**
  * Created by sylvan on 2017/8/17.
  */
-class ForecastDataMapper {
-    fun convertFromDataModel(zipCode: Long, forecast : ForecastResult) : ForecastList {
+class ServerDataMapper {
+    fun convertToDomain(zipCode: Long, forecast : ForecastResult) : ForecastList {
         return ForecastList(zipCode,forecast.city.name, forecast.city.country, convertForecastListToDomain(forecast.list))
     }
 
