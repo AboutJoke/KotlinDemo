@@ -4,13 +4,17 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import example.sylvan.com.kotlindemo.domain.commands.RequestForecastCommand
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.find
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , ToolbarManager{
+
+    override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
     private val items = listOf(
             "Mon 6/23 - Sunny - 31/17",
@@ -26,14 +30,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initToolbar()
+
+
 //        val forecastList=findViewById<RecyclerView>(R.id.forecast_list)
         forecast_list.layoutManager= LinearLayoutManager(this)
+        attachToScroll(forecast_list)
 //        forecastList.adapter = ForecastListAdapter(items)
+
+//        doAsync {
+//            val result = RequestForecastCommand(94043).execute()
+//            uiThread{
+//                forecast_list.adapter = ForecastListAdapter(result) {
+////                    toast(it.description)
+//                    startActivity<DetailActivity>(DetailActivity.ID to it.id,
+//                            DetailActivity.CITY_NAME to result.city)
+//                }
+//            }
+//        }
 
         doAsync {
             val result = RequestForecastCommand(94043).execute()
-            uiThread{
-                forecast_list.adapter = ForecastListAdapter(result) { toast(it.description) }
+            uiThread {
+                val adapter =ForecastListAdapter(result){
+                    startActivity<DetailActivity>(DetailActivity.ID to it.id,
+                            DetailActivity.CITY_NAME to result.city)
+                }
+                forecast_list.adapter=adapter
+                toolbarTitle="${result.city}(${result.country})"
             }
         }
 

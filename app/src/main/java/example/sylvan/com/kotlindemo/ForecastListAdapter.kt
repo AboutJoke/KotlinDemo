@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import example.sylvan.com.kotlindemo.domain.model.Forecast
 import example.sylvan.com.kotlindemo.domain.model.ForecastList
+import example.sylvan.com.kotlindemo.extensions.toDateString
 import example.sylvan.com.kotlindemo.utils.ctx
 import kotlinx.android.synthetic.main.item_forecast.view.*
 import java.text.DateFormat
@@ -15,7 +16,9 @@ import java.util.*
 /**
  * Created by sylvan on 2017/8/17.
  */
-class ForecastListAdapter(val weekForecast: ForecastList,val itemClick: (Forecast) -> Unit) : RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
+class ForecastListAdapter(private val weekForecast: ForecastList,
+                          private val itemClick: (Forecast) -> Unit) :
+        RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
 
     public interface OnItemClickListener {
         operator fun invoke(forecast: Forecast)
@@ -34,7 +37,7 @@ class ForecastListAdapter(val weekForecast: ForecastList,val itemClick: (Forecas
         return ViewHolder(view,itemClick)
     }
 
-    class ViewHolder(view: View, val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
 //        private val iconView: ImageView = view.find(R.id.icon)
 //        private val dateView: TextView = view.find(R.id.date)
 //        private val descriptionView: TextView = view.find(R.id.description)
@@ -46,7 +49,7 @@ class ForecastListAdapter(val weekForecast: ForecastList,val itemClick: (Forecas
                 Glide.with(itemView.ctx)
                         .load(iconUrl)
                         .into(itemView.icon)
-                itemView.date.text = convertDate(date)
+                itemView.date.text = date.toDateString()
                 itemView.description.text = description
                 itemView.maxTemperature.text = "${high.toString()}º"
                 itemView.minTemperature.text = "${low.toString()}º"
